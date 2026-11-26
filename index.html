@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mudras of India</title>
+  <meta name="description" content="Browse the hand gestures of Indian yoga and classical dance.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Karla:wght@400;500;600&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- Duotone filter for the book's grayscale illustrations:
+       white paper (and transparent letterbox areas) -> transparent, dark ink -> vermilion, mid-tones -> saffron/gold. -->
+  <svg class="defs-only" width="0" height="0" aria-hidden="true" focusable="false">
+    <filter id="duotone" x="0" y="0" width="1" height="1" color-interpolation-filters="sRGB">
+      <feColorMatrix type="matrix" values="
+        0     0     0     0 0.96
+        0.13  0.26  0.05  0 0.34
+        0.06  0.12  0.02  0 0.12
+       -0.50 -1.00 -0.19  1.6 0"/>
+    </filter>
+  </svg>
+
+  <a class="skip-link" href="#stage">Skip to the stage</a>
+
+  <header class="site-header">
+    <svg class="header-mandala" data-mandala="12" viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"></svg>
+    <h1 class="site-title">Mudras of India</h1>
+    <p class="site-subtitle">From <cite>Mudras of India</cite> by Cain &amp; Revital Carroll</p>
+    <div class="ornament-rule" aria-hidden="true"><span></span></div>
+  </header>
+
+  <main>
+    <!-- Search + category filters. Logic is added by js/search.js (integration). -->
+    <section class="finder" aria-label="Find a mudra">
+      <div class="search-wrap">
+        <label for="search" class="sr-only">Search mudras</label>
+        <svg class="search-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/>
+        </svg>
+        <input id="search" type="search" autocomplete="off" spellcheck="false"
+               placeholder="Search by name, meaning or ailment…"
+               role="combobox" aria-expanded="false" aria-controls="search-results" aria-autocomplete="list">
+        <div id="search-results" class="search-results" role="listbox" aria-label="Search results" hidden></div>
+      </div>
+      <div id="category-chips" class="chip-row" role="group" aria-label="Filter by category"></div>
+    </section>
+
+    <!-- THE STAGE: a hand rig that forms the selected mudra,  (stage.js) -->
+    <section id="stage" class="stage" aria-label="Mudra stage" tabindex="-1">
+      <div class="stage-visual">
+        <div id="stage-canvas" class="stage-canvas">
+          <svg class="stage-mandala" data-mandala="16" viewBox="-100 -100 200 200" aria-hidden="true" focusable="false"></svg>
+          <!-- Hands are drawn into this SVG by stage.js -->
+          <svg id="stage-hands" class="stage-hands" viewBox="0 0 600 440" role="img" aria-label="Two stylized hands at rest"></svg>
+          <figure id="stage-figure" class="stage-figure" aria-hidden="false">
+            <img id="stage-img" alt="">
+            <div id="stage-placeholder" class="stage-placeholder" hidden aria-hidden="true"><span></span></div>
+            <figcaption id="stage-ref-cap"></figcaption>
+          </figure>
+          <p id="stage-note" class="stage-note" hidden></p>
+        </div>
+        <div class="stage-controls">
+          <button id="random-btn" class="btn btn-primary" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h3.5c4 0 5 10 9 10H20M4 17h3.5c1.6 0 2.7-1.6 3.6-3.5M13 10.5c.9-1.9 2-3.5 3.5-3.5H20M17.5 4.5 20 7l-2.5 2.5M17.5 14.5 20 17l-2.5 2.5"/></svg>
+            Random mudra
+          </button>
+        </div>
+      </div>
+
+      <div class="stage-panel">
+        <div id="stage-intro" class="stage-intro">
+          <p class="eyebrow">Hasta · the language of hands</p>
+          <h2>Choose a gesture</h2>
+          <p>Pick a mudra from the collection below, search for one, or let chance decide. The hands will take its shape.</p>
+        </div>
+
+        <!-- Info card: filled by Stage.goTo(). Static skeleton so IDs stay stable. -->
+        <article id="info-card" class="info-card" aria-labelledby="info-name" hidden>
+          <header class="info-head">
+            <div id="info-badges" class="info-badges"></div>
+            <h2 id="info-name" class="info-name" tabindex="-1"></h2>
+            <p id="info-english" class="info-english"></p>
+            <p id="info-function" class="info-function"></p>
+          </header>
+          <blockquote id="info-tidbit" class="info-tidbit"></blockquote>
+          <div id="info-chips" class="info-chips"></div>
+          <figure id="info-extra" class="info-extra" hidden></figure>
+          <div id="info-sections" class="info-sections"></div>
+          <footer class="info-foot">
+            <span id="info-cite" class="info-cite"></span>
+            <button id="info-back" class="btn btn-ghost" type="button">Return to hands</button>
+          </footer>
+        </article>
+        <!-- Screen-reader announcement of the selected mudra -->
+        <p id="stage-status" class="sr-only" aria-live="polite" aria-atomic="true"></p>
+      </div>
+    </section>
+
+    <section class="collection" aria-labelledby="collection-title">
+      <div class="collection-head">
+        <h2 id="collection-title">The collection</h2>
+        <p id="gallery-count" class="gallery-count"></p>
+      </div>
+      <div id="gallery" class="gallery"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="ornament-rule" aria-hidden="true"><span></span></div>
+    <p>Mudra names and descriptions from <cite>Mudras of India: A Comprehensive Guide to the Hand Gestures of Yoga and Indian Dance</cite> by Cain Carroll &amp; Revital Carroll. Hand drawings are simplified illustrations made for this site.</p>
+    <p class="footer-note">Content from <cite>Mudras of India</cite> by Cain &amp; Revital Carroll (Singing Dragon), shared here for study. Not medical advice: consult a qualified practitioner for health concerns.</p>
+  </footer>
+
+  <!-- Mudra data (generated by tools/build.py) -->
+  <script src="js/mudras-data.js"></script>
+  <!-- Pose data -->
+  <script src="js/poses.js"></script>
+  <!-- stage.js -->
+  <script src="js/stage.js"></script>
+  <!-- app.js -->
+  <script src="js/app.js"></script>
+
+  <!-- Public build: rig-drawn gallery thumbnails instead of the book's photos -->
+  <script src="js/thumbs.js"></script>
+  <!-- search.js -->
+  <script src="js/search.js"></script>
+</body>
+</html>
